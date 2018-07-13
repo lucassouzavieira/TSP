@@ -3,12 +3,6 @@ project(CaixeroViajante)
 
 set(CMAKE_CXX_STANDARD 14)
 
-file(GLOB INCLUDE_FILE
-        include/*.c
-        include/*.h
-        include/*.cpp
-        include/*.hpp)
-
 file(GLOB SRC_FILES
         src/*.c
         src/*.cpp)
@@ -18,4 +12,4 @@ include_directories(
         src
 )
 
-add_executable(CaixeroViajante main.cpp ${INCLUDE_FILES} ${SRC_FILES} include/chromosome.h)
+add_executable(CaixeroViajante main.cpp ${SRC_FILES})

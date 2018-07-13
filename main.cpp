@@ -17,14 +17,18 @@
 #include <iostream>
 #include <region.h>
 #include <chromosome.h>
+#include <geneticalgorithm.h>
+
+using namespace std;
 
 int main() {
-    auto map = new tsp::Region;
+    string file = "input.txt";
+    auto map = tsp::Region();
 
-    std::string file = "input.txt";
-    auto r = map->fromFile(file);
-    map->print();
+    if (map.fromFile(file)) {
 
-    std::cout << map->countCities() << std::endl;
-    return 0;
+    }
+
+    std::cout << "Invalid input file" << std::endl;
+    std::exit(1);
 }

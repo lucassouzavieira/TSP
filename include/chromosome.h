@@ -38,7 +38,11 @@ namespace tsp {
 
         void mutation(double probability);
 
+        static Chromosome randomChromossome(unsigned int size);
+
         Chromosome crossover(const Chromosome &chromosome, unsigned int pcross);
+
+        unsigned long size();
 
     private:
         Region region;
@@ -107,6 +111,7 @@ namespace tsp {
 
     Chromosome Chromosome::crossover(const Chromosome &chromosome, unsigned int pcross) {
         Chromosome child = Chromosome();
+
         auto size = this->values.size();
         child.values.resize(size);
 
@@ -119,6 +124,7 @@ namespace tsp {
             child.values[indexC] = this->values[indexP];
             ++indexC;
         }
+
         while (indexC < size) {
             auto value = chromosome.values[indexP % size];
             auto it = std::find(child.values.begin(), child.values.end(), value);
@@ -132,6 +138,22 @@ namespace tsp {
         }
 
         return child;
+    }
+
+    Chromosome Chromosome::randomChromossome(unsigned int size) {
+        std::vector<int> values = std::vector<int>();
+        values.resize(size);
+
+        auto seed = std::chrono::system_clock::now().time_since_epoch().count();
+        std::shuffle(values.begin(), values.end(), std::default_random_engine(seed));
+
+        Chromosome generated = Chromosome();
+        generated.values = values;
+        return generated;
+    }
+
+    unsigned long Chromosome::size() {
+        return this->values.size();
     }
 }
 
