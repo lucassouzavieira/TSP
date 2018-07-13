@@ -59,17 +59,17 @@ namespace tsp {
     }
 
     double Region::getDistance(uint32_t firstCity, uint32_t sndCity) {
-        auto itA = this->mapOfCities.find(firstCity);
-        auto itB = this->mapOfCities.find(sndCity);
+        try {
+            auto itA = this->mapOfCities.find(firstCity);
+            auto itB = this->mapOfCities.find(sndCity);
 
-        if (itA == this->mapOfCities.end() || itB == this->mapOfCities.end()) {
-            throw std::invalid_argument("Invalid city id");
+            City a = itA->second;
+            City b = itB->second;
+
+            return std::sqrt(std::pow(a.x - b.x, 2.0) + std::pow(a.y - b.y, 2.0));
+        } catch (std::exception &exception) {
+            std::cout << exception.what() << " -- " << firstCity << " and " << sndCity << std::endl;
         }
-
-        City a = itA->second;
-        City b = itB->second;
-
-        return std::sqrt(std::pow(a.x - b.x, 2.0) + std::pow(a.y - b.y, 2.0));
     }
 
     uint32_t Region::countCities() {

@@ -26,7 +26,11 @@ int main() {
     auto map = tsp::Region();
 
     if (map.fromFile(file)) {
+        auto solution = tsp::TSPGeneticAlgorithm(500, 1000, 10, 0.7);
+//        map.print();
 
+        solution.setPopulation(map);
+        solution.run();
     }
 
     std::cout << "Invalid input file" << std::endl;

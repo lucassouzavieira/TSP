@@ -17,10 +17,10 @@
 #ifndef TSP_GENETICALGORITHM_H
 #define TSP_GENETICALGORITHM_H
 
+#include <map>
 #include <vector>
 #include <fstream>
 #include <iostream>
-#include <map>
 #include "chromosome.h"
 
 
@@ -37,8 +37,7 @@ namespace tsp {
         Chromosome best;
         std::ofstream output;
         bool isChange;
-
-        void setPopulation(const Region &region);
+        bool hasPopulation;
 
         void setBestCromossome();
 
@@ -58,8 +57,22 @@ namespace tsp {
         TSPGeneticAlgorithm(unsigned int population, unsigned int iterations = 1000, int pCross = 10,
                             double mutationProbability = 0.5);
 
+        void setPopulation(Region &region);
+
         void run();
     };
+
+    void TSPGeneticAlgorithm::setPopulation(Region &region) {
+        auto size = this->population.size();
+
+        for (auto index = 0; index < size; ++index) {
+            this->population[index] = Chromosome(region);
+            this->population[index].shuffle();
+        }
+
+        this->hasPopulation = true;
+        this->setBestCromossome();
+    }
 
     void TSPGeneticAlgorithm::setBestCromossome() {
         unsigned int bestIndex = 0;
@@ -155,9 +168,12 @@ namespace tsp {
 
     void TSPGeneticAlgorithm::run() {
         unsigned int executed = 0;
-        this->createInitialPopulation();
 
-        while (executed < this->iterations) {
+        if (!this->hasPopulation) {
+            this->createInitialPopulation();
+        }
+
+        while (executed < 10) {
             this->crossover();
             this->mutation();
             this->setBestCromossome();

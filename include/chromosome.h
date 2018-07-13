@@ -38,6 +38,8 @@ namespace tsp {
 
         void mutation(double probability);
 
+        void shuffle();
+
         static Chromosome randomChromossome(unsigned int size);
 
         Chromosome crossover(const Chromosome &chromosome, unsigned int pcross);
@@ -62,6 +64,8 @@ namespace tsp {
         for (uint v = 1; v <= size; v++) {
             this->values.push_back(v);
         }
+
+        this->region = region;
     }
 
     double Chromosome::objectiveFunctionValue() {
@@ -138,6 +142,10 @@ namespace tsp {
         }
 
         return child;
+    }
+
+    void Chromosome::shuffle() {
+        std::random_shuffle(this->values.begin(), this->values.end());
     }
 
     Chromosome Chromosome::randomChromossome(unsigned int size) {
