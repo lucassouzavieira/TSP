@@ -18,4 +18,4 @@ include_directories(
         src
 )
 
-add_executable(CaixeroViajante main.cpp ${INCLUDE_FILES} ${SRC_FILES})
+add_executable(CaixeroViajante main.cpp ${INCLUDE_FILES} ${SRC_FILES} include/chromosome.h)

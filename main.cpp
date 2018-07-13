@@ -16,6 +16,7 @@
 
 #include <iostream>
 #include <region.h>
+#include <chromosome.h>
 
 int main() {
     auto map = new tsp::Region;
