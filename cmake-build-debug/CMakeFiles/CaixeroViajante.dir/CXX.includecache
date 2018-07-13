@@ -1,0 +1,34 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/city.h
+
+../include/region.h
+city.h
+../include/city.h
+map
+-
+cmath
+-
+iostream
+-
+sstream
+-
+fstream
+-
+functional
+-
+vector
+-
+
+/home/lucas/CLionProjects/CaixeroViajante/main.cpp
+iostream
+-
+region.h
+-
+
