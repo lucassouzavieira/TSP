@@ -26,6 +26,7 @@
 
 namespace tsp {
     using Population = std::vector<Chromosome>;
+    using Hibrid = std::function<Population(Population &population, Chromosome best, double mutationProbability)>;
 
     class TSPGeneticAlgorithm {
     private:
@@ -36,8 +37,12 @@ namespace tsp {
         Population population;
         Chromosome best;
         std::ofstream output;
+        Hibrid hibridization;
+
         bool isChange;
         bool hasPopulation;
+        bool hasCustomAlgorithm;
+
 
         void setBestCromossome();
 
@@ -58,6 +63,8 @@ namespace tsp {
                             double mutationProbability = 0.5);
 
         void setPopulation(Region &region);
+
+        void setHibridization(Hibrid callback);
 
         void run();
     };
@@ -87,8 +94,11 @@ namespace tsp {
             }
         }
 
+        auto candidate = this->population[bestIndex];
+
         if (this->best.size() == 0 ||
-            this->population[bestIndex].objectiveFunctionValue() < this->best.objectiveFunctionValue()) {
+            candidate.objectiveFunctionValue() < this->best.objectiveFunctionValue() &&
+            candidate.objectiveFunctionValue() != 0) {
             this->best = this->population[bestIndex];
             this->isChange = true;
         }
@@ -105,6 +115,12 @@ namespace tsp {
     }
 
     void TSPGeneticAlgorithm::mutation() {
+        if (this->hasCustomAlgorithm) {
+            this->population = this->hibridization(this->population, this->best, this->mutationProbability);
+            return;
+        }
+
+        // Algoritmo genetico default
         for (auto &chromosome: this->population) {
             chromosome.mutation(this->mutationProbability);
         }
@@ -158,6 +174,7 @@ namespace tsp {
         this->iterations = iterations;
         this->pCross = static_cast<unsigned int>(pCross);
         this->mutationProbability = mutationProbability;
+        this->hasCustomAlgorithm = false;
         TSPGeneticAlgorithm();
     }
 
@@ -180,6 +197,11 @@ namespace tsp {
             executed++;
             std::cout << executed << std::endl;
         }
+    }
+
+    void TSPGeneticAlgorithm::setHibridization(Hibrid hibrid) {
+        this->hibridization = hibrid;
+        this->hasCustomAlgorithm = true;
     }
 }
 

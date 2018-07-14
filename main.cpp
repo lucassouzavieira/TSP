@@ -20,15 +20,46 @@
 #include <geneticalgorithm.h>
 
 using namespace std;
+using namespace tsp;
 
 int main() {
     string file = "input.txt";
     auto map = tsp::Region();
 
+    // Hibridizacao - as mutacoes passam a se basear no melhor Cromossomo / funcao-objetivo da iteracao anterior
+    auto callback = [](Population &population, Chromosome best, double mutationProbability) -> Population {
+        Population adjusted = Population();
+
+        auto size = population.size();
+        adjusted.resize(size);
+
+        for (auto index = 0; index < size; ++index) {
+            adjusted[index] = best.clone();
+        }
+
+
+        // Mutacoes baseadas na FO de melhor desempenho
+        for (auto &chromosome: adjusted) {
+            chromosome.mutation(mutationProbability);
+        }
+
+        return adjusted;
+    };
+
+//    // Algoritmo genetico puro
+//    if (map.fromFile(file)) {
+//        auto solution = tsp::TSPGeneticAlgorithm(500, 500, 10, 0.7);
+//        solution.setPopulation(map);
+//        solution.run();
+//    }
+
+//    std::cout << "Híbrido" << std::endl;
+
+    // Híbrido
     if (map.fromFile(file)) {
-        auto solution = tsp::TSPGeneticAlgorithm(500, 1000, 10, 0.7);
-        std::cout << map.countCities() << std::endl;
+        auto solution = tsp::TSPGeneticAlgorithm(500, 500, 10, 0.7);
         solution.setPopulation(map);
+        solution.setHibridization(callback);
         solution.run();
     }
 

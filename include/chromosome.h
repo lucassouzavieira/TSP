@@ -32,6 +32,8 @@ namespace tsp {
 
         Chromosome(tsp::Region &region);
 
+        Chromosome clone();
+
         double objectiveFunctionValue();
 
         void print(bool path = false);
@@ -49,8 +51,6 @@ namespace tsp {
     private:
         Region region;
         std::vector<int> values;
-
-        void mutation(std::function<void(double)> mutation);
     };
 
     Chromosome::Chromosome() {
@@ -166,6 +166,13 @@ namespace tsp {
 
     unsigned long Chromosome::size() {
         return this->values.size();
+    }
+
+    Chromosome Chromosome::clone() {
+        auto cloned = Chromosome();
+        cloned.values = this->values;
+        cloned.region = this->region;
+        return cloned;
     }
 }
 
