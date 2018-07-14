@@ -37,7 +37,7 @@ namespace tsp {
 
         double getDistance(uint32_t firstCity, uint32_t sndCity);
 
-        uint32_t countCities();
+        unsigned long countCities();
 
         void print();
 
@@ -59,21 +59,17 @@ namespace tsp {
     }
 
     double Region::getDistance(uint32_t firstCity, uint32_t sndCity) {
-        try {
-            auto itA = this->mapOfCities.find(firstCity);
-            auto itB = this->mapOfCities.find(sndCity);
+        auto itA = this->mapOfCities.find(firstCity);
+        auto itB = this->mapOfCities.find(sndCity);
 
-            City a = itA->second;
-            City b = itB->second;
+        City a = itA->second;
+        City b = itB->second;
 
-            return std::sqrt(std::pow(a.x - b.x, 2.0) + std::pow(a.y - b.y, 2.0));
-        } catch (std::exception &exception) {
-            std::cout << exception.what() << " -- " << firstCity << " and " << sndCity << std::endl;
-        }
+        return std::sqrt(std::pow(a.x - b.x, 2.0) + std::pow(a.y - b.y, 2.0));
     }
 
-    uint32_t Region::countCities() {
-        return static_cast<uint32_t>(this->mapOfCities.size());
+    unsigned long int Region::countCities() {
+        return this->mapOfCities.size();
     }
 
     void Region::print() {

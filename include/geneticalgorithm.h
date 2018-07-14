@@ -173,12 +173,12 @@ namespace tsp {
             this->createInitialPopulation();
         }
 
-        while (executed < 10) {
-            this->crossover();
+        while (executed < this->iterations) {
             this->mutation();
             this->setBestCromossome();
             this->printBestSolution();
             executed++;
+            std::cout << executed << std::endl;
         }
     }
 }

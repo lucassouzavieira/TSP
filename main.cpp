@@ -27,8 +27,7 @@ int main() {
 
     if (map.fromFile(file)) {
         auto solution = tsp::TSPGeneticAlgorithm(500, 1000, 10, 0.7);
-//        map.print();
-
+        std::cout << map.countCities() << std::endl;
         solution.setPopulation(map);
         solution.run();
     }

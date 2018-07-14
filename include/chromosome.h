@@ -34,7 +34,7 @@ namespace tsp {
 
         double objectiveFunctionValue();
 
-        void print();
+        void print(bool path = false);
 
         void mutation(double probability);
 
@@ -80,12 +80,16 @@ namespace tsp {
         return result;
     }
 
-    void Chromosome::print() {
-        for (auto v : this->values) {
-            std::cout << v << "*";
+    void Chromosome::print(bool path) {
+        if (path) {
+            for (auto v : this->values) {
+                std::cout << v << "*";
+            }
+
+            std::cout << "- ";
         }
 
-        std::cout << "- Obj. Function: " << this->objectiveFunctionValue() << std::endl;
+        std::cout << "Obj. Function: " << this->objectiveFunctionValue() << std::endl;
     }
 
     void Chromosome::mutation(double probability) {
