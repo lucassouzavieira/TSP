@@ -26,16 +26,18 @@
 
 namespace tsp {
     using Population = std::vector<Chromosome>;
-    using Hibrid = std::function<Population(Population &population, Chromosome best, double mutationProbability)>;
+    using Hibrid = std::function<Population(Population &population, unsigned int best, double mutationProbability)>;
 
     class TSPGeneticAlgorithm {
     private:
         double mutationProbability;
         unsigned int iterations;
         unsigned int pCross;
-
         Population population;
+
         Chromosome best;
+        unsigned int bestPosition;
+
         std::ofstream output;
         Hibrid hibridization;
 
@@ -101,6 +103,7 @@ namespace tsp {
             candidate.objectiveFunctionValue() != 0) {
             this->best = this->population[bestIndex];
             this->isChange = true;
+            this->bestPosition = bestIndex;
         }
     }
 
@@ -116,7 +119,7 @@ namespace tsp {
 
     void TSPGeneticAlgorithm::mutation() {
         if (this->hasCustomAlgorithm) {
-            this->population = this->hibridization(this->population, this->best, this->mutationProbability);
+            this->population = this->hibridization(this->population, this->bestPosition, this->mutationProbability);
             return;
         }
 
@@ -195,7 +198,6 @@ namespace tsp {
             this->setBestCromossome();
             this->printBestSolution();
             executed++;
-            std::cout << executed << std::endl;
         }
     }
 

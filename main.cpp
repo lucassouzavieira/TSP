@@ -27,33 +27,39 @@ int main() {
     auto map = tsp::Region();
 
     // Hibridizacao - as mutacoes passam a se basear no melhor Cromossomo / funcao-objetivo da iteracao anterior
-    auto callback = [](Population &population, Chromosome best, double mutationProbability) -> Population {
-        Population adjusted = Population();
-
+    auto callback = [](Population &population, unsigned int best, double mutationProbability) -> Population {
         auto size = population.size();
-        adjusted.resize(size);
+        auto bestChromosome = population[best];
 
-        for (auto index = 0; index < size; ++index) {
-            adjusted[index] = best.clone();
+        /**
+         * Busca por individuos proximos ao melhor atual
+         * Variacoes de 5% no valor da FO sao consideradas boas o suficiente
+         */
+        double nVariation = bestChromosome.objectiveFunctionValue() - bestChromosome.objectiveFunctionValue() * 0.05;
+        double pVariation = bestChromosome.objectiveFunctionValue() + bestChromosome.objectiveFunctionValue() * 0.05;
+
+        for (unsigned int i = (best - 5); i <= (best + 5); i++) {
+            if (population[i].objectiveFunctionValue() <= pVariation &&
+                population[i].objectiveFunctionValue() >= nVariation) {
+                population.push_back(population[i].clone());
+            }
         }
 
-
-        // Mutacoes baseadas na FO de melhor desempenho
-        for (auto &chromosome: adjusted) {
+        for (auto &chromosome: population) {
             chromosome.mutation(mutationProbability);
         }
 
-        return adjusted;
+        return population;
     };
 
-//    // Algoritmo genetico puro
-//    if (map.fromFile(file)) {
-//        auto solution = tsp::TSPGeneticAlgorithm(500, 500, 10, 0.7);
-//        solution.setPopulation(map);
-//        solution.run();
-//    }
+    // Algoritmo genetico puro
+    if (map.fromFile(file)) {
+        auto solution = tsp::TSPGeneticAlgorithm(500, 500, 10, 0.7);
+        solution.setPopulation(map);
+        solution.run();
+    }
 
-//    std::cout << "Híbrido" << std::endl;
+    std::cout << "Híbrido" << std::endl;
 
     // Híbrido
     if (map.fromFile(file)) {
@@ -63,6 +69,5 @@ int main() {
         solution.run();
     }
 
-    std::cout << "Invalid input file" << std::endl;
-    std::exit(1);
+    std::exit(0);
 }
